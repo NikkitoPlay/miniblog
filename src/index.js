@@ -4,10 +4,33 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import Home from './pages/Home/Home';
+import About from './pages/About/About';
+
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+
+//pages
+const router = createBrowserRouter([
+  {
+    path:'/',
+    element: <App/>,
+    children:[
+      {
+        path:'/',
+        element:<Home/>
+      },
+      {
+        path:'/about',
+        element: <About/>
+      },
+    ]
+  }
+]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </React.StrictMode>
 );
 
