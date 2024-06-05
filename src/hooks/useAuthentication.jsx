@@ -43,7 +43,6 @@ export const useAuthentication = () => {
 
       setLoading(false);
       return user;
-      
     } catch (error) {
       console.log(error.message);
       console.log(typeof error.message);
@@ -66,10 +65,17 @@ export const useAuthentication = () => {
     return () => setCancelled(true);
   }, []);
 
+  //logout
+  const logout = () => {
+    checkIsCancelled();
+    signOut(auth);
+  };
+
   return {
     auth,
     createUser,
     error,
     loading,
+    logout
   };
 };
