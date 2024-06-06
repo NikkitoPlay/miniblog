@@ -1,4 +1,4 @@
-import { db } from "../firebase/config";
+import { db,app } from "../firebase/config";
 
 import {
   getAuth,
@@ -18,7 +18,7 @@ export const useAuthentication = () => {
   //deal with memory leak
   const [cancelled, setCancelled] = useState(false);
 
-  const auth = getAuth();
+  const auth = getAuth(app);
 
   function checkIsCancelled() {
     if (cancelled) {
@@ -71,11 +71,37 @@ export const useAuthentication = () => {
     signOut(auth);
   };
 
+  //login
+  const login = async(data) =>{
+    checkIsCancelled()
+    setLoading(true)
+    setError(false)
+
+    try {
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.message)
+      let systemErrorMessage;
+
+      if (error.message.includes("invalid-credential")) {
+        systemErrorMessage = 'Usuário ou senha incorretos';
+      } else{
+        systemErrorMessage = 'Ocorreu um erro. Tente novamente mais tarde.';
+      }
+
+      setError(systemErrorMessage);
+      setLoading(false);
+    }
+
+  }
+
   return {
     auth,
     createUser,
     error,
     loading,
-    logout
+    logout,
+    login,
   };
 };
