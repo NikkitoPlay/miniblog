@@ -2,28 +2,24 @@ import styles from "./Dashboard.module.css";
 
 import { Link } from "react-router-dom";
 
+//hooks
 import { useAuthValue } from "../../context/AuthContext";
 import { useFetchDocuments } from "../../hooks/useFetchDocuments";
+import { useDeleteDocument } from "../../hooks/useDeleteDocument";
 
 const Dashboard = () => {
-
-
+  const { deleteDocument } = useDeleteDocument("posts");
   const { user } = useAuthValue();
   const uid = user.uid;
 
   //posts do usuario
   const { documents: posts, loading } = useFetchDocuments("posts", null, uid);
-  
 
-  const deleteDocument = (id)=>{
-
-  }
-
-  if(loading){
-    return <p>Carregando..</p>
+  if (loading) {
+    return <p>Carregando..</p>;
   }
   return (
-    <div className={styles.dashboard}> 
+    <div className={styles.dashboard}>
       <h2>Dashboard</h2>
       <p>Gerencie os seus posts</p>
       {posts && posts.length === 0 ? (
@@ -48,10 +44,16 @@ const Dashboard = () => {
                   <Link to={`/posts/${post.id}`} className="btn btn-outline">
                     Ver
                   </Link>
-                  <Link to={`/posts/edit/${post.id}`} className="btn btn-outline">
+                  <Link
+                    to={`/posts/edit/${post.id}`}
+                    className="btn btn-outline"
+                  >
                     Editar
                   </Link>
-                  <button onClick={() => deleteDocument(post.id)} className="btn btn-outline btn-danger">
+                  <button
+                    onClick={() => deleteDocument(post.id)}
+                    className="btn btn-outline btn-danger"
+                  >
                     Excluir
                   </button>
                 </div>
